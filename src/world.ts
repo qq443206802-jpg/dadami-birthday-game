@@ -31,7 +31,7 @@ export class World extends Phaser.Scene {
   this.ui.onStart=()=>this.changeLevel(this.ui.progress.level,true);
   this.ui.onRefresh=()=>{this.ui.setBird(this.birds[this.active].color);this.refreshProps();};
   this.ui.onHome=()=>{this.controls.clear();this.birds.forEach(b=>b.body.setVelocity(0));};
-  this.ui.onEndingChange=open=>{this.controls.clear();if(open){this.birds.forEach(b=>b.body.setVelocity(0));this.game.loop.sleep();}else this.game.loop.wake();};
+  this.ui.onEndingChange=open=>{this.controls.clear();this.game.events.emit('birthday-overlay',open);if(open){this.birds.forEach(b=>b.body.setVelocity(0));this.game.loop.sleep();}else this.game.loop.wake();};
   this.ui.birdData=color=>this.textures.getBase64(`bird-${color}-0`);
   this.ui.npcData=role=>this.textures.getBase64(`npc-${role}`);
   this.level=getLevel(this.startData.levelId||this.ui.progress.level);this.safe={...this.level.spawn};

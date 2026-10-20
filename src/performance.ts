@@ -29,6 +29,6 @@ export function observePerformance(game:Phaser.Game,phase:()=>string){
   if(now-lastReport>1000){lastReport=now;report();}
  };
  game.events.on(Phaser.Core.Events.POST_STEP,sample);
- const clear=()=>{previous=0;};document.addEventListener('visibilitychange',clear);
- window.addEventListener('pagehide',()=>{game.events.off(Phaser.Core.Events.POST_STEP,sample);observer.disconnect();document.removeEventListener('visibilitychange',clear);},{once:true});
+ const clear=()=>{previous=0;};document.addEventListener('visibilitychange',clear);game.events.on('birthday-overlay',clear);
+ window.addEventListener('pagehide',()=>{game.events.off(Phaser.Core.Events.POST_STEP,sample);game.events.off('birthday-overlay',clear);observer.disconnect();document.removeEventListener('visibilitychange',clear);},{once:true});
 }

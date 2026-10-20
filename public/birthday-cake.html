@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07172f">
+<title>dadami birthday game · 生日蛋糕</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07172f;color:#e6f3ff;font-family:"Microsoft YaHei",sans-serif}body{min-height:100svh;background:radial-gradient(ellipse at 72% 42%,#17385b 0,#0c2340 35%,#07172f 72%)}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #b4e5ff;outline-offset:5px}.shell{position:relative;max-width:1200px;min-height:100svh;margin:auto;padding:58px 52px 42px;display:grid;grid-template-columns:36% 64%;grid-template-rows:1fr auto;align-items:center;overflow:hidden}.shell:before{content:"";position:absolute;inset:22px;border:1px solid #9bc9fa22;border-radius:22px;pointer-events:none}.intro{position:relative;z-index:1;padding:30px 0 10px}.eyebrow{font-size:10px;letter-spacing:4px;color:#a2c4e1;margin:0 0 28px}.line{display:inline-block;width:28px;height:1px;background:#8fc9e2;vertical-align:middle;margin-right:12px}h1{font-family:"Songti SC","SimSun",serif;font-weight:400;font-size:clamp(32px,4.3vw,56px);line-height:1.5;letter-spacing:5px;margin:0 0 22px;text-shadow:0 0 35px #a5d9ff33}.dedication{font-size:14px;letter-spacing:2px;color:#c8e7ff;margin:0 0 12px}.wish{font-size:12px;line-height:2.2;color:#9eb8d1;max-width:310px;white-space:pre-line;margin:0}.stage{position:relative;grid-column:2;grid-row:1 / 3;align-self:stretch;min-height:450px}canvas{display:block;width:100%;height:100%;position:absolute;inset:0}.stage-note{position:absolute;bottom:15px;left:0;right:0;text-align:center;font-size:9px;letter-spacing:3px;color:#7c9fbf;pointer-events:none}.controls{position:relative;z-index:1;padding:26px 0 20px}.primary{display:block;border:1px solid #c0e8ff88;background:linear-gradient(120deg,#bfdfed,#7fb4d5);color:#102e4b;letter-spacing:1px;padding:14px 22px;border-radius:30px;font-size:12px;box-shadow:0 0 28px #69bcff1b;transition:box-shadow .2s,transform .2s}.primary:hover{box-shadow:0 0 30px #69bcff55;transform:translateY(-1px)}.links{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px}.links button{border:0;border-bottom:1px solid #9fcbeb44;background:none;color:#a9c8e1;padding:3px 0 7px;font-size:11px}.status{font-size:11px;color:#a1bed8;line-height:1.8;min-height:38px;margin:18px 0 0}.close{position:absolute;right:39px;top:36px;background:#0c2340;border:1px solid #7c9fbf55;color:#a9c8e1;border-radius:30px;font-size:10px;padding:8px 13px;z-index:3}.close[hidden]{display:none}.signature{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#567694;font-size:8px;letter-spacing:3px}
+@media(max-width:650px) and (orientation:portrait){.shell{padding:45px 28px 30px;display:flex;flex-direction:column;min-height:100svh}.shell:before{inset:12px}.intro{text-align:center;padding:10px 0 0}.eyebrow{margin-bottom:14px;font-size:8px}h1{font-size:33px;line-height:1.35;margin-bottom:12px}.dedication{font-size:12px}.wish{font-size:10px;max-width:300px}.stage{width:100%;min-height:300px;flex:1}.stage-note{bottom:0;font-size:8px}.controls{text-align:center;padding:10px 0}.primary{margin:auto}.links{justify-content:center;margin-top:14px}.status{margin-top:12px;min-height:20px;font-size:10px}.close{top:23px;right:23px}.signature{bottom:8px;font-size:6px}}
+@media(max-height:540px) and (orientation:landscape){.shell{height:100svh;min-height:310px;padding:25px 32px 20px;grid-template-columns:40% 60%}.shell:before{inset:10px;border-radius:14px}.intro{padding:0}.eyebrow{font-size:7px;margin-bottom:12px;letter-spacing:2px}h1{font-size:28px;line-height:1.35;letter-spacing:3px;margin-bottom:12px}.dedication{font-size:10px;margin-bottom:6px}.wish{font-size:9px;line-height:1.7;max-width:260px}.stage{min-height:260px}.stage-note{bottom:6px;font-size:7px}.controls{padding:12px 0 3px}.primary{padding:10px 16px;font-size:10px}.links{margin-top:10px;gap:14px}.links button{font-size:9px;padding-bottom:4px}.status{font-size:9px;min-height:22px;margin-top:9px}.close{top:20px;right:23px;padding:5px 10px;font-size:8px}.signature{font-size:6px;bottom:5px}}
+</style>
+</head>
+<body>
+<main class="shell">
+ <button class="close" id="return" hidden>返回旅程 ↗</button>
+ <header class="intro">
+  <p class="eyebrow"><span class="line"></span>A LITTLE BIRTHDAY WISH</p>
+  <h1>把星光，<br>切成一块甜。</h1>
+  <p class="dedication" id="recipient">生日快乐，今天的你。</p>
+  <p class="wish" id="wish">愿实验有进展，生活有惊喜。<br>愿每一个平凡的日子，都有人陪你闪闪发光。</p>
+ </header>
+ <div class="stage"><canvas id="cake" role="img" aria-label="缓缓旋转的蓝色双层生日蛋糕，三根蜡烛的火焰轻轻跳动，周围有闪烁的星光"></canvas><span class="stage-note">THREE CANDLES · ONE LITTLE WISH</span></div>
+ <div class="controls">
+  <button class="primary" id="blow">许个愿，吹灭蜡烛 ✧</button>
+  <div class="links"><button id="rotate" aria-pressed="false">暂停旋转</button><button id="goodnight">带着祝福睡个好觉 ↗</button></div>
+  <p class="status" id="status" role="status" aria-live="polite">三根烛光，替你守住三个小小的愿望。</p>
+ </div>
+ <small class="signature">dadami birthday game · Made by Moon</small>
+</main>
+<script>
+// Original Canvas 2D projection renderer. No library, network or microphone needed.
+const canvas=document.getElementById('cake'),ctx=canvas.getContext('2d');
+const params=new URLSearchParams(location.search),embedded=window.parent!==window;
+const recipient=params.get('recipient'),wish=params.get('wish');
+if(recipient)document.getElementById('recipient').textContent=`生日快乐，${recipient.slice(0,30)}。`;
+if(wish)document.getElementById('wish').textContent=wish.slice(0,600);
+document.getElementById('return').hidden=!embedded;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let width=0,height=0,scale=1,yaw=.35,time=0,last=0,frame=0,paused=reduced.matches,lit=true,blownAt=-100;
+const cakeIntervals=[];let cakeReportAt=0;
+const cakePerf=params.get('perf')==='1'?document.createElement('output'):null;
+if(cakePerf){cakePerf.id='cake-performance';cakePerf.style.cssText='position:fixed;right:12px;bottom:12px;max-width:250px;padding:8px;background:#07172fee;color:#e6f3ff;font:10px/1.5 monospace;white-space:pre-wrap;z-index:5';cakePerf.textContent='蛋糕帧率采样中…';document.body.append(cakePerf);}
+const pitch=.47,cp=Math.cos(pitch),sp=Math.sin(pitch),TAU=Math.PI*2;
+const stars=Array.from({length:28},(_,i)=>({x:(Math.sin(i*127.1)*43758.54)%1,y:(Math.sin(i*269.5)*15731.74)%1,phase:i*1.73}));
+function resize(){const r=canvas.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);scale=Math.min(width/350,height/300);render();}
+const observer=new ResizeObserver(resize);observer.observe(canvas);
+function project(x,y,z){const rx=x*Math.cos(yaw)+z*Math.sin(yaw),rz=-x*Math.sin(yaw)+z*Math.cos(yaw);return {x:width*.5+rx*scale,y:height*.58+(-y*cp+rz*sp)*scale,d:y*sp+rz*cp};}
+function polygon(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.65*scale;ctx.stroke();}}
+function star(x,y,r,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.translate(x,y);ctx.beginPath();ctx.moveTo(0,-r);ctx.quadraticCurveTo(r*.18,-r*.18,r,0);ctx.quadraticCurveTo(r*.18,r*.18,0,r);ctx.quadraticCurveTo(-r*.18,r*.18,-r,0);ctx.quadraticCurveTo(-r*.18,-r*.18,0,-r);ctx.fillStyle='#e3f6ff';ctx.fill();ctx.restore();}
+function render(){
+ ctx.clearRect(0,0,width,height);
+ for(const s of stars){const x=(Math.abs(s.x)*.88+.06)*width,y=(Math.abs(s.y)*.82+.07)*height;star(x,y,(1.2+.8*Math.sin(s.phase))*scale,reduced.matches?.45:.3+.35*(1+Math.sin(time*.8+s.phase)));}
+ // A soft pool of light grounds the platter without an expensive blur filter.
+ const glow=ctx.createRadialGradient(width*.5,height*.81,0,width*.5,height*.81,width*.38);glow.addColorStop(0,'#77cfff26');glow.addColorStop(1,'#77cfff00');ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
+ const queue=[];
+ function face(points,fill,stroke){const p=points.map(v=>project(...v));queue.push({d:p.reduce((s,v)=>s+v.d,0)/p.length,draw:()=>polygon(p,fill,stroke)});}
+ function bead(x,y,z,r,color='#c4e6fa',spark=false){const p=project(x,y,z);queue.push({d:p.d,draw:()=>{const radius=r*scale;const g=ctx.createRadialGradient(p.x-radius*.35,p.y-radius*.4,.1,p.x,p.y,radius);g.addColorStop(0,'#f2fcff');g.addColorStop(.28,color);g.addColorStop(1,'#639cc7');ctx.beginPath();ctx.arc(p.x,p.y,radius,0,TAU);ctx.fillStyle=g;ctx.fill();if(spark)star(p.x-radius*.3,p.y-radius*.4,radius*1.5,reduced.matches?.65:.5+.5*Math.sin(time*1.6+x));}});}
+ function cylinder(radius,bottom,top,hue,saturation,lightness){
+  const n=72;
+  for(let i=0;i<n;i++){const a=i/n*TAU,b=(i+1)/n*TAU,mid=(a+b)/2;
+   const front=Math.sin(mid-yaw);if(front<-.04)continue;
+   const light=lightness+Math.cos(mid-yaw+1.1)*9;
+   face([[Math.cos(a)*radius,bottom,Math.sin(a)*radius],[Math.cos(b)*radius,bottom,Math.sin(b)*radius],[Math.cos(b)*radius,top,Math.sin(b)*radius],[Math.cos(a)*radius,top,Math.sin(a)*radius]],`hsl(${hue} ${saturation}% ${light}%)`);
+   // Delicate vertical icing pleats.
+   if(i%3===0)face([[Math.cos(a)*(radius+.3),bottom+4,Math.sin(a)*(radius+.3)],[Math.cos(b)*(radius+.3),bottom+4,Math.sin(b)*(radius+.3)],[Math.cos(b)*(radius+.3),top-5,Math.sin(b)*(radius+.3)],[Math.cos(a)*(radius+.3),top-5,Math.sin(a)*(radius+.3)]],`hsla(${hue} 70% 94% / .11)`);
+  }
+  face(Array.from({length:n},(_,i)=>{const a=i/n*TAU;return [Math.cos(a)*radius,top,Math.sin(a)*radius];}),`hsl(${hue} 65% ${Math.min(94,lightness+16)}%)`,'#c3e8ff66');
+ }
+ cylinder(141,-35,-30,210,32,62);cylinder(135,-30,-26,212,44,83);
+ cylinder(111,-25,33,211,57,66);cylinder(85,34,87,211,60,74);
+ // Frosting scallops, pearl borders and tiny side stars turn with the cake.
+ for(const [r,y,count] of [[109,32,32],[109,-22,38],[83,86,28],[84,37,30]])for(let i=0;i<count;i++){const a=i/count*TAU;bead(Math.cos(a)*r,y,Math.sin(a)*r,3.2,'#dcf2ff',i%11===0);}
+ for(const [r,y,count] of [[112,14,24],[86,68,20]])for(let i=0;i<count;i++){const a=i/count*TAU;if(Math.sin(a-yaw)<0)continue;bead(Math.cos(a)*r,y-6*(i%2),Math.sin(a)*r,2.5,'#a3d9f2');}
+ for(let i=0;i<9;i++){const a=i/9*TAU;if(Math.sin(a-yaw)<0)continue;const p=project(Math.cos(a)*112,-3,Math.sin(a)*112);queue.push({d:p.d+.1,draw:()=>star(p.x,p.y,4.5*scale,.8)});}
+ // Exactly three candles, evenly spaced on the upper tier.
+ for(let i=0;i<3;i++){
+  const a=i/3*TAU,x=Math.cos(a)*43,z=Math.sin(a)*43,bottom=87,top=126+(i===1?5:0),p=project(x,(bottom+top)/2,z);
+  queue.push({d:p.d,draw:()=>{
+   const b=project(x,bottom,z),t=project(x,top,z),w=4.2*scale;
+   const g=ctx.createLinearGradient(t.x-w,0,t.x+w,0);g.addColorStop(0,'#6c9fd1');g.addColorStop(.4,'#eef8ff');g.addColorStop(1,'#7daacb');ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(t.x-w,t.y,w*2,b.y-t.y,1.5*scale);ctx.fill();
+   ctx.save();ctx.beginPath();ctx.rect(t.x-w,t.y,w*2,b.y-t.y);ctx.clip();ctx.strokeStyle='#b1d3ec';ctx.lineWidth=1.4*scale;for(let y=t.y;y<b.y+8*scale;y+=9*scale){ctx.beginPath();ctx.moveTo(t.x-w,y);ctx.lineTo(t.x+w,y-4*scale);ctx.stroke();}ctx.restore();
+   ctx.beginPath();ctx.ellipse(t.x,t.y,w,1.7*scale,0,0,TAU);ctx.fillStyle='#e6f4ff';ctx.fill();ctx.strokeStyle='#2d4056';ctx.lineWidth=1.2*scale;ctx.beginPath();ctx.moveTo(t.x,t.y-1);ctx.lineTo(t.x,t.y-5*scale);ctx.stroke();
+   const sway=reduced.matches?0:Math.sin(time*7+i*2)*1.5+Math.sin(time*11+i)*.6;
+   if(lit){const fx=t.x,fy=t.y-5*scale,h=(14+(reduced.matches?0:Math.sin(time*9+i*3)*1.3))*scale,lean=sway*scale;
+    const halo=ctx.createRadialGradient(fx,fy-h*.4,0,fx,fy-h*.4,26*scale);halo.addColorStop(0,'#e6f6ff70');halo.addColorStop(.3,'#86c9ff22');halo.addColorStop(1,'#79bdff00');ctx.fillStyle=halo;ctx.fillRect(fx-27*scale,fy-35*scale,54*scale,54*scale);
+    ctx.beginPath();ctx.moveTo(fx,fy);ctx.bezierCurveTo(fx-7*scale,fy-4*scale,fx-3*scale+lean,fy-h*.7,fx+lean,fy-h);ctx.bezierCurveTo(fx+4*scale+lean,fy-h*.5,fx+6*scale,fy-3*scale,fx,fy);const fire=ctx.createLinearGradient(0,fy-h,0,fy);fire.addColorStop(0,'#fff4cb');fire.addColorStop(.45,'#fff9e9');fire.addColorStop(1,'#75c4ff');ctx.fillStyle=fire;ctx.fill();ctx.beginPath();ctx.ellipse(fx,fy-3*scale,1.8*scale,4*scale,0,0,TAU);ctx.fillStyle='#fffdf4';ctx.fill();
+   }else if(time-blownAt<2.5){ctx.save();ctx.globalAlpha=Math.max(0,.35-(time-blownAt)*.14);ctx.strokeStyle='#c4e4f8';ctx.lineWidth=1.2*scale;ctx.beginPath();ctx.moveTo(t.x,t.y-5*scale);ctx.bezierCurveTo(t.x-7*scale,t.y-20*scale,t.x+10*scale,t.y-24*scale,t.x+sway*3*scale,t.y-(32+(time-blownAt)*6)*scale);ctx.stroke();ctx.restore();}
+  }});
+ }
+ queue.sort((a,b)=>a.d-b.d);for(const item of queue)item.draw();
+ // Two small orbiting glints make the turn readable even at a distance.
+ for(let i=0;i<2;i++){const a=yaw+i*Math.PI,p=project(Math.cos(a)*157,45,Math.sin(a)*157);star(p.x,p.y,4*scale,reduced.matches?.65:.45+.35*Math.sin(time+i));}
+}
+function animate(now){frame=requestAnimationFrame(animate);if(now-last<1000/30)return;const elapsed=last?now-last:0,dt=Math.min(elapsed/1000,.06);last=now;time+=dt;if(!paused)yaw+=dt*TAU/30;render();if(cakePerf&&elapsed){cakeIntervals.push(elapsed);if(cakeIntervals.length>3600)cakeIntervals.shift();if(now-cakeReportAt>1000){cakeReportAt=now;const sorted=[...cakeIntervals].sort((a,b)=>a-b),total=cakeIntervals.reduce((a,b)=>a+b,0);cakePerf.textContent=JSON.stringify({seconds:+(total/1000).toFixed(1),fps:+(cakeIntervals.length*1000/total).toFixed(1),p95FrameMs:+sorted[Math.ceil(sorted.length*.95)-1].toFixed(1),framesOver50ms:cakeIntervals.filter(x=>x>50).length},null,2);}}}
+function start(){cancelAnimationFrame(frame);last=0;frame=requestAnimationFrame(animate);}
+function updatePause(){const b=document.getElementById('rotate');b.textContent=paused?'继续旋转':'暂停旋转';b.setAttribute('aria-pressed',String(paused));}
+document.getElementById('rotate').onclick=()=>{paused=!paused;updatePause();};
+reduced.addEventListener('change',()=>{paused=reduced.matches;updatePause();});
+document.getElementById('blow').onclick=()=>{lit=!lit;if(!lit)blownAt=time;document.getElementById('blow').textContent=lit?'许个愿，吹灭蜡烛 ✧':'再点亮一次烛光 ♡';document.getElementById('status').textContent=lit?'烛光重新亮起，今天的快乐可以再来一次。':'愿望已悄悄收好。愿你被爱包围，也拥有好好休息的夜晚。';canvas.setAttribute('aria-label',lit?'旋转的蓝色双层生日蛋糕，三根蜡烛已点亮':'旋转的蓝色双层生日蛋糕，三根蜡烛已吹灭，愿望已收好');};
+function send(type){if(embedded)parent.postMessage({type},location.origin);else{document.getElementById('status').textContent='晚安，生日快乐。愿今晚的梦，也是蓝色的星空。';lit=false;blownAt=time;paused=true;updatePause();document.getElementById('blow').textContent='再点亮一次烛光 ♡';}}
+document.getElementById('goodnight').onclick=()=>send('birthday-cake:goodnight');
+document.getElementById('return').onclick=()=>send('birthday-cake:close');
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(frame);else start();});
+window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);observer.disconnect();});
+updatePause();resize();start();
+</script>
+</body>
+</html>

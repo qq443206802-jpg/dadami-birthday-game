@@ -1,0 +1,11 @@
+import Phaser from 'phaser';
+import './style.css';
+import './minigames.css';
+import {InputState,bindInput} from './input';
+import {UI} from './ui';
+import {World} from './world';
+import {observePerformance} from './performance';
+const input=new InputState();bindInput(input);const ui=new UI(input);
+const game=new Phaser.Game({type:Phaser.AUTO,parent:'game',width:1280,height:720,backgroundColor:'#c6d2b8',fps:{target:60,forceSetTimeOut:true},antialias:true,roundPixels:false,scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:'arcade',arcade:{gravity:{x:0,y:1000},debug:false}},scene:[new World(ui,input)],render:{pixelArt:false,antialias:true},audio:{noAudio:true}});
+observePerformance(game,()=>ui.title?'cover':`${ui.progress.level}${ui.blocked?'-dialog':''}`);
+window.addEventListener('error',e=>{document.getElementById('loading')!.hidden=true;console.error('Game error:',e.message);});

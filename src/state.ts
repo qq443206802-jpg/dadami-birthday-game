@@ -3,7 +3,7 @@ export type ItemId = 'invite' | 'bookmark' | 'card' | 'star' | 'key';
 export interface GameConfig { blueName: string; yellowName: string; recipient: string; wish: string; volume: number }
 export interface Progress { version: 1; level: LevelId; items: ItemId[]; done: string[]; montageSeen: boolean }
 export const LEVEL_IDS: LevelId[] = ['gate','library','approach','lab','cell','lounge','dorm'];
-export const defaultConfig: GameConfig = { blueName:'小蓝', yellowName:'小黄', recipient:'亲爱的你', wish:'生日快乐，今天的快乐属于你。\n愿你的每一天，都有小小的惊喜和大大的拥抱。',volume:0.3 };
+export const defaultConfig: GameConfig = { blueName:'小蓝', yellowName:'小黄', recipient:'达大米', wish:'生日快乐，今天的快乐属于你。\n愿你的每一天，都有小小的惊喜和大大的拥抱。',volume:0.3 };
 export const freshProgress = (): Progress => ({version:1,level:'gate',items:[],done:[],montageSeen:false});
 export const hasProgress=(p:Progress)=>p.level!=='gate'||p.items.length>0||p.done.length>0||p.montageSeen;
 export function collect(p: Progress, id: ItemId) { if (!p.items.includes(id)) p.items.push(id); }

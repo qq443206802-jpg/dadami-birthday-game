@@ -101,7 +101,7 @@ export class World extends Phaser.Scene {
  private sign(label:string,x:number,y:number){const text=buildingSign(this,label,x,y);this.signs.push(text);return text;}
  private layoutLabels(){
   const lead=this.birds[this.active],obstacles:LabelRect[]=this.signs.map(s=>s.getBounds());
-  obstacles.push({x:this.cameras.main.scrollX,y:0,width:1280,height:180});
+  obstacles.push({x:this.cameras.main.scrollX,y:0,width:this.cameras.main.width,height:180});
   for(const p of this.props)if(p.spec.kind.startsWith('npc-'))obstacles.push(p.art.getBounds());
   for(const b of this.birds)if(b.name.visible)obstacles.push(b.name.getBounds());
   const ordered=[...this.props].sort((a,b)=>Number(b===this.nearest)-Number(a===this.nearest));
@@ -172,7 +172,7 @@ export class World extends Phaser.Scene {
   for(const [i,c] of (this.level.checkpoints||[]).entries())if(i>this.checkpoint&&(!c.requires||this.ui.progress.done.includes(c.requires))&&Math.abs(lead.body.x-c.x)<65&&isGrounded(lead.body.body!)){this.checkpoint=i;this.safe={x:c.x,y:c.y};this.sparkle(c.x,575);this.ui.toast('安全点已点亮。掉落后从这里继续，已开的机关会保留。');}
  }
  update(time:number,delta:number){
-  if(!this.birds.length)return;const dt=Math.min(delta,40),lead=this.birds[this.active],other=this.birds[1-this.active];const blocked=this.ui.blocked||this.busy;
+  if(!this.birds.length)return;const dt=Math.min(delta,40);let lead=this.birds[this.active],other=this.birds[1-this.active];const blocked=this.ui.blocked||this.busy;
   if(!this.ui.title&&!document.hidden)this.ui.environmentSeconds+=Math.min(delta,100)/1000;
   this.atmosphere.update(this.ui.environmentSeconds);
   if(!blocked&&this.level.id==='lounge'&&!this.ui.progress.done.includes('boss')){this.ui.games.quiz(3,teacherQuiz,()=>{this.solved('boss');this.ui.games.clockout(()=>{this.solved('clockout');this.ui.toast('下班啦！现在可以安心布置生日派对。');});});return;}
@@ -181,7 +181,7 @@ export class World extends Phaser.Scene {
   else {
    const home=this.props.find(p=>p.spec.id==='home');
    if(home&&!this.ui.progress.done.includes('home')&&Math.abs(lead.body.x-home.spec.x)<70&&isGrounded(lead.body.body!)){this.interact(home);this.controls.endFrame();return;}
-   if(this.controls.take('switch')){this.active=1-this.active;this.trail=[];this.still=0;this.jumpAt=-Infinity;this.ui.setBird(this.birds[this.active].color);this.controls.endFrame();return;}
+   if(this.controls.take('switch')){this.active=1-this.active;this.trail=[];this.still=0;this.jumpAt=-Infinity;lead=this.birds[this.active];other=this.birds[1-this.active];this.ui.setBird(lead.color);}
    const move=(this.controls.isDown('right')?1:0)-(this.controls.isDown('left')?1:0);lead.body.setVelocityX(move*235);
    const grounded=isGrounded(lead.body.body!);
    if(grounded){lead.flapped=false;if(lead.body.body!.velocity.y>=0)lead.groundedAt=time;if(!this.level.checkpoints&&lead.body.y>515)this.safe={x:lead.body.x,y:530};}
@@ -222,7 +222,7 @@ export class World extends Phaser.Scene {
    if(!moving&&!air&&Math.floor(time/4500+i)%3===0)b.visual.setAngle(Math.sin(time/550)*5);
   }
   const active=this.birds[this.active];this.indicator?.setPosition(active.body.x,active.body.y-110+Math.sin(time/300)*3).setVisible(!this.ui.title);
-  if(!this.ui.title)this.cameras.main.setScroll(cameraScroll(this.cameras.main.scrollX,active.body.x,1280,this.level.width,Math.min(delta,40)/1000),0);
+  if(!this.ui.title)this.cameras.main.setScroll(cameraScroll(this.cameras.main.scrollX,active.body.x,this.cameras.main.width,this.level.width,Math.min(delta,40)/1000),0);
   this.layoutLabels();
   this.controls.endFrame();
  }

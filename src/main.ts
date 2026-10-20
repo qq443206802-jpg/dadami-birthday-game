@@ -1,11 +1,16 @@
 import Phaser from 'phaser';
 import './style.css';
 import './minigames.css';
+import './mobile.css';
 import {InputState,bindInput} from './input';
 import {UI} from './ui';
 import {World} from './world';
 import {observePerformance} from './performance';
+import {bindDisplay} from './display';
 const input=new InputState();bindInput(input);const ui=new UI(input);
+bindDisplay(input);
 const game=new Phaser.Game({type:Phaser.AUTO,parent:'game',width:1280,height:720,backgroundColor:'#c6d2b8',fps:{target:60,forceSetTimeOut:true},antialias:true,roundPixels:false,scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:'arcade',arcade:{gravity:{x:0,y:1000},debug:false}},scene:[new World(ui,input)],render:{pixelArt:false,antialias:true},audio:{noAudio:true}});
 observePerformance(game,()=>ui.title?'cover':`${ui.progress.level}${ui.blocked?'-dialog':''}`);
+const stage=document.getElementById('stage')!;
+new ResizeObserver(()=>{const width=stage.clientWidth<stage.clientHeight&&stage.clientWidth<=700?720:1280;game.scale.getParentBounds();if(game.scale.width!==width)game.scale.setGameSize(width,720);else game.scale.refresh();}).observe(stage);
 window.addEventListener('error',e=>{document.getElementById('loading')!.hidden=true;console.error('Game error:',e.message);});

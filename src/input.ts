@@ -14,12 +14,13 @@ export function bindInput(input:InputState) {
  window.addEventListener('keydown',e=>{if((e.target as HTMLElement)?.matches('input,textarea'))return;const a=map[e.code];if(a){e.preventDefault();if(!e.repeat)input.down(a,e.code);}});
  window.addEventListener('keyup',e=>{const a=map[e.code];if(a){input.up(a,e.code);}});
  const clear=()=>{input.clear();document.querySelectorAll('.held').forEach(el=>el.classList.remove('held'));};
- window.addEventListener('blur',clear);document.addEventListener('visibilitychange',clear);
+ window.addEventListener('blur',clear);window.addEventListener('resize',clear);window.visualViewport?.addEventListener('resize',clear);document.addEventListener('visibilitychange',clear);document.addEventListener('fullscreenchange',clear);
  for(const button of document.querySelectorAll<HTMLButtonElement>('[data-action]')) {
   const a=button.dataset.action as Action;
-  button.addEventListener('pointerdown',e=>{e.preventDefault();button.setPointerCapture(e.pointerId);input.down(a,`pointer-${e.pointerId}`);button.classList.add('held');});
-  const release=(e:PointerEvent)=>{input.up(a,`pointer-${e.pointerId}`);button.classList.remove('held');};
+  button.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();button.setPointerCapture(e.pointerId);input.down(a,`pointer-${e.pointerId}`);button.classList.add('held');});
+  const release=(e:PointerEvent)=>{input.up(a,`pointer-${e.pointerId}`);if(!input.isDown(a))button.classList.remove('held');};
   button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+  window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);
   button.addEventListener('contextmenu',e=>e.preventDefault());
  }
 }

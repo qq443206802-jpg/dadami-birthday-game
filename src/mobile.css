@@ -1,0 +1,74 @@
+/* Preserve camera proportions; portrait uses a closer view that follows the birds. */
+html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;background:#102430}
+#app>header,#app>footer{flex-shrink:0}
+#stage{flex:1;min-height:0;width:100%;max-height:none;aspect-ratio:auto;margin:0;touch-action:none}
+#game canvas{object-fit:contain}
+.stage-tools{position:absolute;right:max(14px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));display:flex;gap:8px;z-index:4}
+.stage-tools button{min-width:48px;min-height:40px;padding:8px 13px;background:#16323fed;color:#fff0cf;border:1px solid #8ba597;border-radius:20px;font-size:12px;touch-action:manipulation}
+.status-stack{position:absolute;right:max(14px,env(safe-area-inset-right));top:62px;width:260px;display:grid;justify-items:end;gap:7px}
+.status-stack .quest{position:static;width:100%;transform:none}
+.status-stack #campus-clock{position:static;max-width:100%;font-size:10px}
+.touch-controls{left:max(18px,env(safe-area-inset-left));right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));pointer-events:none;touch-action:none}
+.touch-directions,.touch-actions{gap:14px;align-items:end}
+.touch-controls button{width:56px;height:56px;min-width:48px;min-height:48px;font-size:24px;margin:0;touch-action:none;-webkit-touch-callout:none}
+.touch-controls [data-action="interact"]{font-size:15px}
+.touch-controls .jump{width:66px;height:66px;margin:0;font-size:28px}
+#app.expanded{position:fixed;inset:0;z-index:30;width:100%;height:100vh;height:100dvh}
+#app.expanded>header,#app.expanded>footer{display:none}
+#app:fullscreen{width:100%;height:100%;background:#102430}
+.modal-backdrop{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));touch-action:pan-y;overscroll-behavior:contain}
+.modal{max-height:calc(100dvh - 28px);-webkit-overflow-scrolling:touch}
+.modal button{touch-action:manipulation;min-height:44px}
+#rotate-hint{z-index:5;bottom:115px;font-size:11px}
+@media(any-pointer:coarse),(max-width:1000px){
+ .touch-controls{display:flex}
+ #app>header{height:44px;padding:0 max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left))}
+ .brand-mark{font-size:28px}.brand{gap:6px}.brand-name{font-size:12px}.brand-name small{font-size:6px;line-height:1.5}
+ #app>footer{display:none}nav{gap:12px}nav button{font-size:11px;padding:8px 0}
+ .chapter-card{left:max(14px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));padding:8px 11px;transform:none;max-width:210px}
+ .chapter-card h2{font-size:17px;margin:5px 0}.chapter-card p{font-size:9px;letter-spacing:1px}
+ .bird-pill{bottom:99px;left:max(18px,env(safe-area-inset-left));padding:6px 10px;font-size:11px}
+ .bird-pill small,#scene-note{display:none}
+ #interaction-prompt{bottom:100px;font-size:12px;padding:8px 12px;max-width:70%;width:max-content}
+ .quest{padding:9px 12px}.quest p{font-size:11px;line-height:1.6;margin-top:4px}
+ .landing-copy{top:8%;left:max(6%,env(safe-area-inset-left))}
+ .landing-copy h1{font-size:clamp(25px,4vw,40px);letter-spacing:2px}
+ .cover-note{right:7%;bottom:22%}
+ .cover-bottom{bottom:2%}
+}
+@media(max-height:540px) and (orientation:landscape){
+ .stage-tools{top:max(8px,env(safe-area-inset-top));gap:6px}
+ .stage-tools button{min-height:36px;font-size:11px;padding:6px 12px}
+ .chapter-card{max-width:180px;padding:7px 10px}.chapter-card h2{font-size:16px;letter-spacing:1px}.chapter-card p{display:none}
+ .status-stack{top:51px;width:215px;gap:4px}.status-stack .quest{padding:7px 10px}.quest>span{display:none}.quest p{font-size:10px;margin:0}.status-stack #campus-clock{font-size:9px;padding:4px 8px}
+ .touch-controls{bottom:max(12px,env(safe-area-inset-bottom))}
+ .touch-controls button{width:52px;height:52px}.touch-controls .jump{width:62px;height:62px}
+ .bird-pill{bottom:83px;font-size:10px}
+ #interaction-prompt{bottom:83px;font-size:11px;max-width:48%}
+ .landing-copy{top:6%}.landing-copy h1{font-size:28px;line-height:1.2;margin-bottom:9px}
+ .landing-copy .eyebrow{font-size:9px;margin-bottom:7px}.landing-copy .intro{font-size:10px;line-height:1.6;margin:0 0 10px}
+ .landing-copy .primary{font-size:11px;padding:11px 16px}.landing-copy .continue{font-size:10px;margin-top:8px}
+ .landing-hint,.cover-bottom{display:none}
+ .modal{max-height:calc(100dvh - 24px)}
+}
+@media(max-width:700px) and (orientation:portrait){
+ #app>header{height:54px}.brand-name{font-size:11px}nav{gap:9px}nav button{font-size:10px}
+ .stage-tools{top:12px}.chapter-card{max-width:190px}.chapter-card h2{font-size:18px}
+ .chapter-card p{display:none}
+ .status-stack{top:104px;left:14px;right:14px;width:auto;gap:7px}.status-stack .quest{max-width:none}.quest p{font-size:11px}.status-stack #campus-clock{font-size:10px}
+ .touch-directions,.touch-actions{gap:9px}.touch-controls{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom))}
+ .touch-controls button{width:52px;height:54px}.touch-controls .jump{width:60px;height:64px}
+ .bird-pill{top:74px;bottom:auto;left:14px;padding:4px 8px;font-size:10px}#interaction-prompt{bottom:160px;font-size:12px;max-width:90%}
+ #rotate-hint{bottom:203px}
+ .landing-copy{top:10%;left:7%;right:7%;max-width:none}.landing-copy h1{font-size:clamp(25px,6.8vw,40px);line-height:1.4;letter-spacing:2px;margin-bottom:20px}
+ .landing-copy .eyebrow{font-size:10px;letter-spacing:3px;margin-bottom:18px}.landing-copy .intro{font-size:13px;line-height:2;margin-bottom:24px}
+ .landing-copy .primary{font-size:14px;padding:16px 22px}.landing-copy .continue{font-size:12px;margin-top:16px}
+ .cover-note,.cover-bottom,.landing-hint{display:none}
+ #landing{background:linear-gradient(#102737e8,#102737b0 60%,#10273755)}
+ .modal{padding:24px 18px}.modal h2{font-size:23px}.modal .quiz-answer{min-height:48px}
+}
+@media(max-width:360px) and (orientation:portrait){
+ .touch-controls button{width:48px;height:50px}.touch-controls .jump{width:54px;height:58px}.touch-directions,.touch-actions{gap:6px}
+ .stage-tools{gap:5px}.stage-tools button{min-width:42px;padding:7px 9px}.chapter-card{max-width:165px}
+}
